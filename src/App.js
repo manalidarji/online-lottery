@@ -88,7 +88,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    getTicketsHandler();
+    document.getElementById('get-tickets').click();
   }, []);
 
 
@@ -104,7 +104,7 @@ const App = () => {
 
       <h2>All Tickets</h2>
       <p><em>Tickets are been displayed from Firebase DB</em></p>
-      {/* <button onClick={getTicketsHandler}>Get all Tickets</button> */}
+      <button id='get-tickets' onClick={getTicketsHandler}>Get all Tickets</button>
       { !!tickets.length &&
       <> 
         <ul>
