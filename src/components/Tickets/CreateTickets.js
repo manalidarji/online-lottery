@@ -5,7 +5,10 @@ import { PER_TICKET_COST } from "../../constants";
 
 const CreateTicket = () => {
 	const perTicketCost = parseInt(PER_TICKET_COST);
-	const [successMsg, setSuccessMsg] = useState('');
+	const [finalMsg, setFinalMsg] = useState({
+		class: '',
+		msg: ''
+	});
 
 	// input fields
 	const [firstNameInput, setFirstNameInput] = useState('');
@@ -30,6 +33,7 @@ const CreateTicket = () => {
 
 	const createTicketHandler = async (e) => {
 		e.preventDefault();
+		const commonAlertClass = 'uk-text-center uk-margin uk-padding-small ';
 		for (let i = 0; i < unitInput; i++) {
 			try {
 				await addDoc(ticketsCollectionRef, {
@@ -37,13 +41,16 @@ const CreateTicket = () => {
 					ticket_owner_phone: phoneInput
 				});
 
-				setSuccessMsg(() => {
-					const ticketMsg = (unitInput > 1) ? 'Tickets were' : 'Ticket was';
-					return `${unitInput} ${ticketMsg} created successfully for ${firstNameInput} ${lastNameInput}`;
-				}
-				);
+				const ticketMsg = (unitInput > 1) ? 'Tickets were' : 'Ticket was';
+				setFinalMsg({
+					class: `${commonAlertClass} uk-alert-success`,
+					msg: `${unitInput} ${ticketMsg} created successfully for '${firstNameInput} ${lastNameInput}'`
+				});
 			} catch (error) {
-				alert('Some problem occured while creating the ticket/s' + error);
+				setFinalMsg({
+					class: `${commonAlertClass} uk-alert-danger`,
+					msg: `Some problem occured while creating the ticket/s ${error}`
+				});
 			}
 		}
 		resetInputs();
@@ -64,7 +71,7 @@ const CreateTicket = () => {
 					</div>
 					<div className="uk-margin">
 						<label>Phone:</label>
-						<input className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} tabIndex="3" required />
+						<input className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} min="1000000000" max="9999999999" tabIndex="3" required />
 					</div>
 					<div className="uk-margin">
 						<label>Unit:</label>
@@ -76,7 +83,7 @@ const CreateTicket = () => {
 					</div>
 					<button className="uk-button uk-button-primary uk-width-1-1 uk-button-large" type="submit" tabIndex="5">Create Ticket</button>
 				</form>
-				<div> {successMsg} </div>
+				<div className={finalMsg.class}> {finalMsg.msg} </div>
 			</div>
 		</div>
 	)
