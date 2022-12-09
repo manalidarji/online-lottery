@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 const HomePage = () => {
   return (
     <>
-    <Header/>
+    <Header/> 
     <div id="main">
         <CreateTicket />
     </div>
