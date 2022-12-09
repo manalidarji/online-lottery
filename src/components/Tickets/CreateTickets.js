@@ -51,30 +51,30 @@ const CreateTicket = () => {
 
 	return (
 		<div className="uk-container">
-			<div class="uk-card uk-card-body uk-card-default">
+			<div className="uk-card uk-card-body uk-card-default">
 				<h2 className="uk-heading-small">Create Tickets</h2>
 				<form onSubmit={createTicketHandler}>
-					<div class="uk-margin">
-						<label for="">First Name:</label>
-						<input className="uk-input" type='text' value={firstNameInput} onChange={e => { setFirstNameInput(e.target.value) }} tabIndex="1" />
+					<div className="uk-margin">
+						<label>First Name:</label>
+						<input className="uk-input" type='text' value={firstNameInput} onChange={e => { setFirstNameInput(e.target.value) }} tabIndex="1" required />
 					</div>
-					<div class="uk-margin">
-						<label for="">Last Name:</label>
-						<input className="uk-input" type='text' value={lastNameInput} onChange={e => { setLastNameInput(e.target.value) }} tabIndex="1" />
+					<div className="uk-margin">
+						<label>Last Name:</label>
+						<input className="uk-input" type='text' value={lastNameInput} onChange={e => { setLastNameInput(e.target.value) }} tabIndex="2" required />
 					</div>
-					<div class="uk-margin">
-						<label for="">Phone:</label>
-						<input className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} tabIndex="2" />
+					<div className="uk-margin">
+						<label>Phone:</label>
+						<input className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} tabIndex="3" required />
 					</div>
-					<div class="uk-margin">
-						<label for="">Unit:</label>
-						<input className="uk-input" type='number' min='1' value={unitInput} onChange={unitChangeHandler} tabIndex="3" />
+					<div className="uk-margin">
+						<label>Unit:</label>
+						<input className="uk-input" type='number' min='1' value={unitInput} onChange={unitChangeHandler} tabIndex="4" required />
 					</div>
-					<div class="uk-margin">
-						<label for="">Total Amount:</label>
+					<div className="uk-margin">
+						<label>Total Amount:</label>
 						<input className="uk-input" type='number' min='1' value={totalInput} readOnly />
 					</div>
-					<button className="uk-button uk-button-primary uk-width-1-1 uk-button-large" type="submit" tabIndex="4">Create Ticket</button>
+					<button className="uk-button uk-button-primary uk-width-1-1 uk-button-large" type="submit" tabIndex="5">Create Ticket</button>
 				</form>
 				<div> {successMsg} </div>
 			</div>
