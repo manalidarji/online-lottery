@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { addDoc } from 'firebase/firestore';
+import { addDoc, getDocs } from 'firebase/firestore';
 import { ticketsCollectionRef } from "../../firebase/config";
-import { PER_TICKET_COST } from "../../constants";
+import { PER_TICKET_COST, TICKET_ID_DIGITS } from "../../constants";
 
 const CreateTicket = () => {
-	const perTicketCost = parseInt(PER_TICKET_COST);
+	const totalDigits = TICKET_ID_DIGITS;
+	const perTicketCost = PER_TICKET_COST;
 	const [finalMsg, setFinalMsg] = useState({
 		class: '',
 		msg: ''
@@ -31,12 +32,20 @@ const CreateTicket = () => {
 		setTotalInput(units * perTicketCost);
 	}
 
+	const addLeadingZeros = (num, totalLength) => String(num).padStart(totalLength, '0');
+
 	const createTicketHandler = async (e) => {
 		e.preventDefault();
 		const commonAlertClass = 'uk-text-center uk-margin uk-padding-small ';
+
+		// get existing number of tickets
+		const allTicketsSnapshot = await getDocs(ticketsCollectionRef);
+		let ticketsCount = allTicketsSnapshot.size;
+
 		for (let i = 0; i < unitInput; i++) {
 			try {
 				await addDoc(ticketsCollectionRef, {
+					ticket_id: addLeadingZeros(++ticketsCount, totalDigits),
 					ticket_owner_name: `${firstNameInput} ${lastNameInput}`,
 					ticket_owner_phone: phoneInput
 				});

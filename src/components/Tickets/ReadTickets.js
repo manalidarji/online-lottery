@@ -4,7 +4,7 @@ import { ticketsCollectionRef } from "../../firebase/config";
 import { PER_TICKET_COST } from "../../constants";
 
 const ReadTickets = () => {
-	const perTicketCost = parseInt(PER_TICKET_COST);
+	const perTicketCost = PER_TICKET_COST;
 
 	const [tickets, setTickets] = useState([]);
 
@@ -45,7 +45,7 @@ const ReadTickets = () => {
 							<tbody>
 								{tickets.map(ticket => {
 									return <tr key={ticket.id}>
-										<td>{ticket.id}</td>
+										<td>{ticket.ticket_id}</td>
 										<td>{ticket.ticket_owner_name}</td>
 										<td>{ticket.ticket_owner_phone}</td>
 									</tr>
