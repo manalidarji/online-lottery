@@ -25,22 +25,21 @@ const ReadTickets = () => {
 
       <br /><br />
 
-      <h4># of tickets Sold: {tickets.length}</h4>
-      <h4>Total Sales : INR {tickets.length * perTicketCost}</h4>
+      { (!!tickets.length) ? 
+        <div> 
+          <p># of tickets Sold: <strong>{tickets.length}</strong> | Total Sales : INR <strong>{tickets.length * perTicketCost}</strong></p>
 
-      <br /><br />
-
-      { !!tickets.length &&
-      <div> 
-        <ul>
-          <li><strong>Ticket ID ------ Ticket Owner Name ------ Ticket Owner Phone</strong></li><br/>
-          {tickets.map( ticket => {
-            return <li key={ticket.id}>
-                {ticket.id} ------ {ticket.ticket_owner_name} ------ {ticket.ticket_owner_phone}
-              </li>
-          })}
-        </ul>    
-      </div> 
+          <br /><br />
+          <ul>
+            <li><strong>Ticket ID ------ Ticket Owner Name ------ Ticket Owner Phone</strong></li><br/>
+            {tickets.map( ticket => {
+              return <li key={ticket.id}>
+                  {ticket.id} ------ {ticket.ticket_owner_name} ------ {ticket.ticket_owner_phone}
+                </li>
+            })}
+          </ul>    
+        </div> 
+        : 'No Tickets Sold Yet! :(' 
       }
     </div>
   )
