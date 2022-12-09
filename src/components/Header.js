@@ -2,30 +2,20 @@ import { Link } from "react-router-dom"
 
 const Header = () => {
   return (
-    <div>
-      <br /><br />
-
-      <h1>Welcome to Lottery - Dec 2022</h1>
-
-      <br />
-
-      <nav>
-        <ul>
-          <li>
-            <Link to='/'>Home</Link>
-          </li>
-          <li>
-            <Link to='/tickets'>View All Tickets</Link>
-          </li>
-          <li>
-            <Link to='/lottery'>Pick Lottery</Link>
-          </li>
-        </ul>
-      </nav>
-
-      <br /><br />
-      <hr/>
-      <br />
+    <div className="uk-container uk-text-right uk-padding-small">
+      <button className="uk-button-default uk-button" uk-icon="icon: menu" type="button">Menu</button>
+      <div uk-dropdown="mode: click">
+        <nav className="uk-nav uk-dropdown-nav">
+          <ul>
+            <li className="uk-margin">
+              <Link to='/'>Create Ticket</Link>
+            </li>
+            <li className="uk-margin uk-margin-remove-bottom">
+              <Link to='/tickets'>View All Tickets</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   )
 }

@@ -8,13 +8,15 @@ const CreateTicket = () => {
 	const [successMsg, setSuccessMsg] = useState('');
 
 	// input fields
-	const [nameInput, setNameInput] = useState('');
+	const [firstNameInput, setFirstNameInput] = useState('');
+	const [lastNameInput, setLastNameInput] = useState('');
 	const [phoneInput, setPhoneInput] = useState('');
 	const [unitInput, setUnitInput] = useState('');
 	const [totalInput, setTotalInput] = useState('');
 
 	const resetInputs = () => {
-		setNameInput('');
+		setFirstNameInput('');
+		setLastNameInput('');
 		setPhoneInput('');
 		setUnitInput('');
 		setTotalInput('');
@@ -31,13 +33,13 @@ const CreateTicket = () => {
 		for (let i = 0; i < unitInput; i++) {
 			try {
 				await addDoc(ticketsCollectionRef, {
-					ticket_owner_name: nameInput,
+					ticket_owner_name: `${firstNameInput} ${lastNameInput}`,
 					ticket_owner_phone: phoneInput
 				});
-				
-				setSuccessMsg( () => {
+
+				setSuccessMsg(() => {
 					const ticketMsg = (unitInput > 1) ? 'Tickets were' : 'Ticket was';
-					return `${unitInput} ${ticketMsg} created successfully for ${nameInput}`;
+					return `${unitInput} ${ticketMsg} created successfully for ${firstNameInput} ${lastNameInput}`;
 				}
 				);
 			} catch (error) {
@@ -46,25 +48,37 @@ const CreateTicket = () => {
 		}
 		resetInputs();
 	}
-  
+
 	return (
-	<div>
-		<h2>Create Tickets</h2>
-
-		<br /><br />
-
-		<form onSubmit={createTicketHandler}>
-			Name: <input type='text' value={nameInput} onChange={e => {setNameInput(e.target.value)}} tabIndex="1" /><br />
-			Phone: <input type='number' value={phoneInput} onChange={e => {setPhoneInput(e.target.value)}} tabIndex="2" /><br />
-			Unit: <input type='number' min='1' value={unitInput} onChange={unitChangeHandler} tabIndex="3" /><br />
-			Total Amount: <input type='number' min='1' value={totalInput} readOnly /><br/>
-			<button type="submit" tabIndex="4">Create Ticket</button>
-		</form>
-
-		<br /><br />
-
-		<div> {successMsg} </div>
-	</div>
+		<div className="uk-container">
+			<div class="uk-card uk-card-body uk-card-default">
+				<h2 className="uk-heading-small">Create Tickets</h2>
+				<form onSubmit={createTicketHandler}>
+					<div class="uk-margin">
+						<label for="">First Name:</label>
+						<input className="uk-input" type='text' value={firstNameInput} onChange={e => { setFirstNameInput(e.target.value) }} tabIndex="1" />
+					</div>
+					<div class="uk-margin">
+						<label for="">Last Name:</label>
+						<input className="uk-input" type='text' value={lastNameInput} onChange={e => { setLastNameInput(e.target.value) }} tabIndex="1" />
+					</div>
+					<div class="uk-margin">
+						<label for="">Phone:</label>
+						<input className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} tabIndex="2" />
+					</div>
+					<div class="uk-margin">
+						<label for="">Unit:</label>
+						<input className="uk-input" type='number' min='1' value={unitInput} onChange={unitChangeHandler} tabIndex="3" />
+					</div>
+					<div class="uk-margin">
+						<label for="">Total Amount:</label>
+						<input className="uk-input" type='number' min='1' value={totalInput} readOnly />
+					</div>
+					<button className="uk-button uk-button-primary uk-width-1-1 uk-button-large" type="submit" tabIndex="4">Create Ticket</button>
+				</form>
+				<div> {successMsg} </div>
+			</div>
+		</div>
 	)
 }
 

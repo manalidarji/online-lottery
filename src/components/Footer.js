@@ -1,10 +1,8 @@
 const Footer = () => {
   return (
-    <div>
-      <hr/>
-      <br /><br />
-      MERRY XMAS | 2022
-      <br /><br />
+    <div className="uk-text-center uk-padding-large">
+      <p>Merry Christmas</p>
+      <p>Osmosis Youth, St. Joseph Church</p>
     </div>
   )
 }

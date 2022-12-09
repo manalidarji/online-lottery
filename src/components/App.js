@@ -1,5 +1,3 @@
-// common css
-import "../assets/css/App.css";
 // router components
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 // pages
