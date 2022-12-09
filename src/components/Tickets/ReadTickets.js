@@ -25,15 +25,15 @@ const ReadTickets = () => {
 				<div>
 					<div className="uk-grid">
 						<div>
-							<h4 class="uk-margin-remove">Total tickets Sold: </h4>
-							<p class="uk-margin-remove uk-text-bold">{tickets.length}</p>
+							<h4 className="uk-margin-remove">Total tickets Sold: </h4>
+							<p className="uk-margin-remove uk-text-bold">{tickets.length}</p>
 						</div>
 						<div>
-							<h4 class="uk-margin-remove">Total Sales : INR </h4>
-							<p class="uk-margin-remove uk-text-bold">{tickets.length * perTicketCost}</p>
+							<h4 className="uk-margin-remove">Total Sales : INR </h4>
+							<p className="uk-margin-remove uk-text-bold">{tickets.length * perTicketCost}</p>
 						</div>
 					</div>
-					<div class="uk-overflow-auto">
+					<div className="uk-overflow-auto">
 						<table className="uk-table uk-table-striped uk-table-small">
 							<thead>
 								<tr>
