@@ -11,7 +11,7 @@ const ReadTickets = () => {
 	const getTickets = async () => {
 		const data = await getDocs(ticketsCollectionRef);
 		const allTickets = data.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-		setTickets(allTickets);
+		setTickets(allTickets.sort((a, b) => b.ticket_id - a.ticket_id));
 	}
 
 	useEffect(() => {
