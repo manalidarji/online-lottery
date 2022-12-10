@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { addDoc, getDocs, writeBatch } from 'firebase/firestore';
+import { addDoc, getDocs } from 'firebase/firestore';
 import { ticketsCollectionRef } from "../../firebase/config";
 import { PER_TICKET_COST, TICKET_ID_DIGITS } from "../../constants";
 
@@ -102,6 +102,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 			}
 		}
 		window.open(`https://wa.me/91${phoneInput}?text=${encodeURIComponent(getWhatsappMessage(ticketsCount, unitInput))}`);
+		updateCouponImage();
 		resetInputs();
 	}
 
