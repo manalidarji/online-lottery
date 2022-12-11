@@ -20,17 +20,22 @@ const CreateTicket = () => {
 		canvas.height = 664;
 		const ctx = canvas.getContext('2d');
 		const img = new Image();
-		img.src = require("../../assets/img/coupon.jpg");
+		img.src = require("../../assets/img/coupon.png");
 		img.onload = () => ctx.drawImage(img, 0, 0);
 	}, []);
 
-	const updateCouponImage = () => {
+	const updateCouponImage = ticketRangeText => {
 		const canvas = canvasRef.current;
 		const ctx = canvas.getContext('2d');
-		ctx.font = '90px serif';
-		ctx.fillText(`₹ ${totalInput}`, 50, 300);
+		ctx.font = '500 28px Open Sans';
 		ctx.textAlign = 'center';
-		ctx.fillText(firstNameInput, 750, 300);
+		ctx.fillStyle = 'black';
+		ctx.fillText(nameInput, 770, 485);
+		ctx.font = '500 26px Open Sans';
+		ctx.fillText(ticketRangeText, 770, 560);
+		ctx.font = '700 23px Open Sans';
+		ctx.fillStyle = 'white';
+		ctx.fillText(`₹ ${totalInput}`, 768, 427);
 		canvas.toBlob(blob => {
 			setCouponImage(new File([blob], 'coupon.png', { type: blob.type }))
 		});
@@ -51,7 +56,7 @@ const CreateTicket = () => {
 			numbersToPrint.push(ticketsCount);
 			ticketsCount--; unitInput--;
 		}
-		return `Greetings of the season ${firstNameInput} ${lastNameInput},
+		return `Greetings of the season ${nameInput},
 		
 Thank you for purchasing Christmas Coupons from us. Your tickets numbers are as follows:
 ${numbersToPrint.reduce((a, b) => `${a}
@@ -59,16 +64,15 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 	}
 
 	// input fields
-	const [firstNameInput, setFirstNameInput] = useState('');
-	const [lastNameInput, setLastNameInput] = useState('');
+	const [nameInput, setNameInput] = useState('');
 	const [phoneInput, setPhoneInput] = useState('');
 	const [unitInput, setUnitInput] = useState('');
 	const [totalInput, setTotalInput] = useState('');
 	const [sellerInput, setSellerInput] = useState('');
+	const [isLoading, setLoading] = useState(false);
 
 	const resetInputs = () => {
-		setFirstNameInput('');
-		setLastNameInput('');
+		setNameInput('');
 		setPhoneInput('');
 		setUnitInput('');
 		setTotalInput('');
@@ -85,6 +89,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 
 	const createTicketHandler = async (e) => {
 		e.preventDefault();
+		setLoading(true);
 		const commonAlertClass = 'uk-text-center uk-margin uk-padding-small ';
 
 		// get existing number of tickets
@@ -95,14 +100,14 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 			for (let i = 0; i < unitInput; i++) {
 				await addDoc(ticketsCollectionRef, {
 					ticket_id: addLeadingZeros(++ticketsCount, totalDigits),
-					ticket_owner_name: `${firstNameInput} ${lastNameInput}`,
+					ticket_owner_name: nameInput,
 					ticket_owner_phone: phoneInput,
 					ticket_seller: sellerInput,
 				});
 			}
 			setFinalMsg({
 				class: `${commonAlertClass} uk-alert-success`,
-				msg: `${unitInput} ${(unitInput > 1) ? 'Tickets were' : 'Ticket was'} created successfully for '${firstNameInput} ${lastNameInput}'`
+				msg: `${unitInput} ${(unitInput > 1) ? 'Tickets were' : 'Ticket was'} created successfully for '${nameInput}`
 			});
 		} catch (error) {
 			setFinalMsg({
@@ -111,8 +116,9 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 			});
 		}
 		window.open(`https://wa.me/91${phoneInput}?text=${encodeURIComponent(getWhatsappMessage(ticketsCount, unitInput))}`);
-		updateCouponImage();
+		updateCouponImage(`${ticketsCount - unitInput} - ${ticketsCount}`);
 		resetInputs();
+		setLoading(false);
 	}
 
 	return (
@@ -121,12 +127,8 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 				<h2 className="uk-heading-small">Create Tickets</h2>
 				<form onSubmit={createTicketHandler}>
 					<div className="uk-margin">
-						<label>First Name:</label>
-						<input placeholder="eg. John" className="uk-input" type='text' value={firstNameInput} onChange={e => { setFirstNameInput(e.target.value) }} tabIndex="1" required />
-					</div>
-					<div className="uk-margin">
-						<label>Last Name:</label>
-						<input placeholder="eg. Varghese" className="uk-input" type='text' value={lastNameInput} onChange={e => { setLastNameInput(e.target.value) }} tabIndex="2" required />
+						<label>Full Name:</label>
+						<input placeholder="eg. John Varghese" className="uk-input" type='text' value={nameInput} onChange={e => { setNameInput(e.target.value) }} tabIndex="1" required />
 					</div>
 					<div className="uk-margin">
 						<label>Phone:</label>
@@ -151,7 +153,8 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 			<div className="uk-margin">
 				<canvas onClick={canvasClickHandler} ref={canvasRef} />
 			</div>
-		</div>
+			<div className={`loader ${isLoading ? 'active' : ''}`}></div>
+		</div >
 	)
 }
 
