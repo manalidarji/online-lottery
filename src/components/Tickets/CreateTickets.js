@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { doc, getDocs, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { doc, getDocs, serverTimestamp, waitForPendingWrites, writeBatch } from 'firebase/firestore';
 import { db, ticketsCollectionRef } from "../../firebase/config";
 import { PER_TICKET_COST, TICKET_ID_DIGITS } from "../../constants";
 
@@ -92,6 +92,8 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 		e.preventDefault();
 		setLoading(true);
 		const commonAlertClass = 'uk-text-center uk-margin uk-padding-small ';
+
+		await waitForPendingWrites(db);
 
 		// get existing number of tickets
 		const allTicketsSnapshot = await getDocs(ticketsCollectionRef);
