@@ -11,6 +11,7 @@ const CreateTicket = () => {
 		class: '',
 		msg: ''
 	});
+	const [couponImage, setCouponImage] = useState(null);
 
 	useEffect(() => {
 		// Creating placeholder coupon
@@ -30,6 +31,18 @@ const CreateTicket = () => {
 		ctx.fillText(`₹ ${totalInput}`, 50, 300);
 		ctx.textAlign = 'center';
 		ctx.fillText(firstNameInput, 750, 300);
+		canvas.toBlob(blob => {
+			setCouponImage(new File([blob], 'coupon'))
+		});
+	}
+
+	const canvasClickHandler = () => {
+		if (couponImage) {
+			navigator.share({
+				text: '',
+				files: [couponImage]
+			})
+		}
 	}
 
 	const getWhatsappMessage = (ticketsCount, unitInput) => {
@@ -140,7 +153,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 				<div className={finalMsg.class}> {finalMsg.msg} </div>
 			</div>
 			<div className="uk-margin">
-				<canvas ref={canvasRef} />
+				<canvas onClick={canvasClickHandler} ref={canvasRef} />
 			</div>
 		</div>
 	)
