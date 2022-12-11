@@ -32,7 +32,7 @@ const CreateTicket = () => {
 		ctx.textAlign = 'center';
 		ctx.fillText(firstNameInput, 750, 300);
 		canvas.toBlob(blob => {
-			setCouponImage(new File([blob], 'coupon'))
+			setCouponImage(new File([blob], 'coupon.png', { type: blob.type }))
 		});
 	}
 
@@ -54,7 +54,6 @@ const CreateTicket = () => {
 		return `Greetings of the season ${firstNameInput} ${lastNameInput},
 		
 Thank you for purchasing Christmas Coupons from us. Your tickets numbers are as follows:
-
 ${numbersToPrint.reduce((a, b) => `${a}
 ${addLeadingZeros(b, totalDigits)}`, '')}`;
 	}
@@ -92,27 +91,24 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 		const allTicketsSnapshot = await getDocs(ticketsCollectionRef);
 		let ticketsCount = allTicketsSnapshot.size;
 
-		for (let i = 0; i < unitInput; i++) {
-			try {
+		try {
+			for (let i = 0; i < unitInput; i++) {
 				await addDoc(ticketsCollectionRef, {
 					ticket_id: addLeadingZeros(++ticketsCount, totalDigits),
 					ticket_owner_name: `${firstNameInput} ${lastNameInput}`,
 					ticket_owner_phone: phoneInput,
 					ticket_seller: sellerInput,
 				});
-
-				const ticketMsg = (unitInput > 1) ? 'Tickets were' : 'Ticket was';
-				setFinalMsg({
-					class: `${commonAlertClass} uk-alert-success`,
-					msg: `${unitInput} ${ticketMsg} created successfully for '${firstNameInput} ${lastNameInput}'`
-				});
-
-			} catch (error) {
-				setFinalMsg({
-					class: `${commonAlertClass} uk-alert-danger`,
-					msg: `Some problem occured while creating the ticket/s ${error}`
-				});
 			}
+			setFinalMsg({
+				class: `${commonAlertClass} uk-alert-success`,
+				msg: `${unitInput} ${(unitInput > 1) ? 'Tickets were' : 'Ticket was'} created successfully for '${firstNameInput} ${lastNameInput}'`
+			});
+		} catch (error) {
+			setFinalMsg({
+				class: `${commonAlertClass} uk-alert-danger`,
+				msg: `Some problem occured while creating the ticket/s ${error}`
+			});
 		}
 		window.open(`https://wa.me/91${phoneInput}?text=${encodeURIComponent(getWhatsappMessage(ticketsCount, unitInput))}`);
 		updateCouponImage();
