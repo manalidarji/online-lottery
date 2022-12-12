@@ -28,8 +28,8 @@ const ReadTickets = () => {
 					<td>{ticket.ticket_owner_name}</td>
 					<td>{ticket.ticket_owner_phone}</td>
 					<td>
-						<button className="uk-button whatsapp-button uk-margin uk-width-max-content">Send details on WhatsApp</button>
-						<button className="uk-button uk-button-primary">Share Coupon Image</button>
+						<button className="uk-button whatsapp-button uk-width-max-content">Send details on WhatsApp</button>
+						<button className="uk-button uk-button-primary uk-width-max-content">Share Coupon Image</button>
 					</td>
 				</tr>
 			))
