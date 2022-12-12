@@ -19,11 +19,16 @@ const CreateTicket = () => {
 		const canvas = canvasRef.current;
 		canvas.width = 1500;
 		canvas.height = 600;
+		setImageToCanvas();
+	}, []);
+
+	const setImageToCanvas = () => {
+		const canvas = canvasRef.current;
 		const ctx = canvas.getContext('2d');
 		const img = new Image();
 		img.src = require("../../assets/img/coupon.png");
 		img.onload = () => ctx.drawImage(img, 0, 0);
-	}, []);
+	}
 
 	const updateCouponImage = ticketRangeText => {
 		const canvas = canvasRef.current;
@@ -34,7 +39,7 @@ const CreateTicket = () => {
 		ctx.fillText(nameInput, 770, 485);
 		ctx.font = '500 26px Open Sans';
 		ctx.fillText(ticketRangeText, 770, 560);
-		ctx.font = '700 23px Open Sans';
+		ctx.font = '700 25px Open Sans';
 		ctx.fillStyle = 'white';
 		ctx.fillText(`₹ ${totalInput}`, 768, 427);
 		canvas.toBlob(blob => {
@@ -43,11 +48,16 @@ const CreateTicket = () => {
 	}
 
 	const canvasClickHandler = () => {
-		if (couponImage) {
+		if (couponImage && whatsappButton.current.classList.contains('uk-hidden')) {
 			navigator.share({
 				text: '',
 				files: [couponImage]
 			})
+			setImageToCanvas();
+		} else if (!whatsappButton.current.classList.contains('uk-hidden')) {
+			alert('Please share ticket details on WhatsApp first');
+		} else {
+			alert('Please create tickets first');
 		}
 	}
 
@@ -59,9 +69,9 @@ const CreateTicket = () => {
 		}
 		return `Greetings of the season ${nameInput},
 		
-Thank you for purchasing Christmas Coupons from us. Your tickets numbers are as follows:
+Thank you for purchasing Christmas Coupons from Osmosis Youth. Your tickets numbers are as follows:
 ${numbersToPrint.reduce((a, b) => `${a}
-${addLeadingZeros(b, totalDigits)}`, '')}`;
+${sellerInput.seller_id + addLeadingZeros(b, totalDigits)}`, '')}`;
 	}
 
 	// loader
@@ -73,11 +83,11 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 	const [totalInput, setTotalInput] = useState('');
 	const [sellerInput, setSellerInput] = useState({
 		seller_id: '',
-        seller_name: ''
+		seller_name: ''
 	});
 
 	const formatName = (name) => name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
-	
+
 	const resetInputs = () => {
 		setNameInput('');
 		setPhoneInput('');
@@ -85,7 +95,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 		setTotalInput('');
 		setSellerInput({
 			seller_id: '',
-        	seller_name: ''
+			seller_name: ''
 		});
 	}
 
@@ -109,7 +119,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 		let ticketsCount = allTicketsSnapshot.size;
 		let startTicketCount = ticketsCount;
 		// handle startTicketCount if it's the first ticket in DB
-		startTicketCount = (startTicketCount) ? startTicketCount+1 : 1;
+		startTicketCount = (startTicketCount) ? startTicketCount + 1 : 1;
 
 		try {
 			const batch = writeBatch(db);
@@ -121,7 +131,10 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 					ticket_owner_phone: phoneInput,
 					ticket_seller: sellerInput.seller_name,
 					timestamp: serverTimestamp()
-				})
+				});
+				if (i === 0) {
+					batch.set(doc(db, 'tickets', newTicketID), { ticket_units: unitInput }, { merge: true });
+				}
 			}
 			await batch.commit();
 			whatsappButton.current.href = `https://wa.me/91${phoneInput}?text=${encodeURIComponent(getWhatsappMessage(ticketsCount, unitInput))}`;
@@ -130,7 +143,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 			// eliminate lower range if it's only 1 ticket
 			let ticketRangeValue = (unitInput > 1) ? `${sellerInput.seller_id}${addLeadingZeros(startTicketCount, totalDigits)} - ` : '';
 			ticketRangeValue += `${sellerInput.seller_id}${addLeadingZeros(ticketsCount, totalDigits)}`;
-	
+
 			updateCouponImage(ticketRangeValue); // update coupon ticket range text
 			setFinalMsg({
 				class: `${commonAlertClass} uk-alert-success`,
@@ -153,7 +166,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 				<form onSubmit={createTicketHandler}>
 					<div className="uk-margin">
 						<label>Full Name:</label>
-						<input placeholder="eg. John Varghese" className="uk-input" type='text' value={nameInput} onChange={e => { setNameInput(formatName(e.target.value))}} tabIndex="1" required />
+						<input placeholder="eg. John Varghese" className="uk-input" type='text' value={nameInput} onChange={e => { setNameInput(formatName(e.target.value)) }} tabIndex="1" required />
 					</div>
 					<div className="uk-margin">
 						<label>Phone:</label>
@@ -168,27 +181,26 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 						<input placeholder="₹" className="uk-input" type='text' value={'₹' + totalInput} readOnly disabled />
 					</div>
 					<div className="uk-margin">
-						<label>Sold By:</label>
+						<label>Sold By Team:</label>
 						<select
 							required
 							value={sellerInput.seller_name}
-							className="uk-select" 
+							className="uk-select"
 							tabIndex="5"
-							onChange={e => { 
+							onChange={e => {
 								setSellerInput({
 									seller_id: e.target.selectedOptions[0].getAttribute('data-seller-id'),
-        							seller_name: e.target.value
-								});								
-								}
-							} >
+									seller_name: e.target.value
+								});
+							}} >
 							<option value=''>Select Seller by clicking here</option>
 							{ALL_SELLERS.map(seller => (
-							<option 
-								key={seller.seller_id} 
-								value={seller.seller_name} 
-								data-seller-id={seller.seller_id}>
+								<option
+									key={seller.seller_id}
+									value={seller.seller_name}
+									data-seller-id={seller.seller_id}>
 									{seller.seller_name}
-							</option>
+								</option>
 							))}
 						</select>
 					</div>

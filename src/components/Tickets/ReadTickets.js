@@ -18,38 +18,54 @@ const ReadTickets = () => {
 		getTickets();
 	}, []);
 
+	const groupTickets = tickets => {
+		return tickets.filter(ticket => ticket?.ticket_units)
+			.map(ticket => (
+				<tr key={ticket.ticket_id}>
+					<td>
+						<p className="uk-width-max-content uk-margin-remove">{ticket.ticket_id} - {parseInt(ticket.ticket_id) + parseInt(ticket.ticket_units) - 1}</p>
+					</td>
+					<td>{ticket.ticket_owner_name}</td>
+					<td>{ticket.ticket_owner_phone}</td>
+					<td>
+						<button className="uk-button whatsapp-button uk-margin uk-width-max-content">Send details on WhatsApp</button>
+						<button className="uk-button uk-button-primary">Share Coupon Image</button>
+					</td>
+				</tr>
+			))
+	}
+
 	return (
 		<div className="uk-container">
 			<h2 className="uk-heading-small">All Tickets</h2>
 			{(!!tickets.length) ?
 				<div>
-					<div className="uk-grid">
-						<div>
-							<h4 className="uk-margin-remove">Total tickets Sold: </h4>
-							<p className="uk-margin-remove uk-text-bold">{tickets.length}</p>
+					<div className="uk-grid uk-margin">
+						<div className="uk-width-1-2">
+							<div className="uk-card uk-card-default uk-card-body uk-card-small">
+								<p className="uk-margin-remove">Total tickets Sold: </p>
+								<h4 className="uk-margin-remove uk-text-bold">{tickets.length}</h4>
+							</div>
 						</div>
-						<div>
-							<h4 className="uk-margin-remove">Total Sales : INR </h4>
-							<p className="uk-margin-remove uk-text-bold">{tickets.length * perTicketCost}</p>
+						<div className="uk-width-1-2">
+							<div className="uk-card uk-card-default uk-card-body uk-card-small">
+								<p className="uk-margin-remove">Total Sales : </p>
+								<h4 className="uk-margin-remove uk-text-bold">₹{tickets.length * perTicketCost}</h4>
+							</div>
 						</div>
 					</div>
 					<div className="uk-overflow-auto">
-						<table className="uk-table uk-table-striped uk-table-small">
+						<table className="uk-table uk-table-striped uk-table-small uk-table-middle">
 							<thead>
 								<tr>
-									<th>Ticket ID</th>
+									<th>Ticket ID Range</th>
 									<th>Ticket Owner Name</th>
 									<th>Ticket Owner Phone</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								{tickets.map(ticket => {
-									return <tr key={ticket.id}>
-										<td>{ticket.ticket_id}</td>
-										<td>{ticket.ticket_owner_name}</td>
-										<td>{ticket.ticket_owner_phone}</td>
-									</tr>
-								})}
+								{groupTickets(tickets)}
 							</tbody>
 						</table>
 					</div>

@@ -2,27 +2,23 @@ export const PER_TICKET_COST = 50;
 export const TICKET_ID_DIGITS = 4;
 export const ALL_SELLERS = [
     {
-        seller_id: 'A',
-        seller_name: 'A_seller_1'
+        seller_id: 5,
+        seller_name: 'Team Jestin'
     },
     {
-        seller_id: 'B',
-        seller_name: 'B_seller_2'
+        seller_id: 1,
+        seller_name: 'Team Philcy'
     },
     {
-        seller_id: 'C',
-        seller_name: 'C_seller_3'
+        seller_id: 2,
+        seller_name: 'Team Justin'
     },
     {
-        seller_id: 'D',
-        seller_name: 'D_seller_4'
+        seller_id: 3,
+        seller_name: 'Team Grejo'
     },
     {
-        seller_id: 'E',
-        seller_name: 'E_seller_5'
-    },
-    {
-        seller_id: 'F',
-        seller_name: 'F_seller_6'
+        seller_id: 4,
+        seller_name: 'Team Alen'
     },
 ];
