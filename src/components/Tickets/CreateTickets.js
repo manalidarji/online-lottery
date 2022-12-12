@@ -124,27 +124,26 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 				})
 			}
 			await batch.commit();
+			whatsappButton.current.href = `https://wa.me/91${phoneInput}?text=${encodeURIComponent(getWhatsappMessage(ticketsCount, unitInput))}`;
+			whatsappButton.current.classList.remove('uk-hidden');
+			// calculate ticket range text
+			// eliminate lower range if it's only 1 ticket
+			let ticketRangeValue = (unitInput > 1) ? `${sellerInput.seller_id}${addLeadingZeros(startTicketCount, totalDigits)} - ` : '';
+			ticketRangeValue += `${sellerInput.seller_id}${addLeadingZeros(ticketsCount, totalDigits)}`;
+	
+			updateCouponImage(ticketRangeValue); // update coupon ticket range text
 			setFinalMsg({
 				class: `${commonAlertClass} uk-alert-success`,
 				msg: `${unitInput} ${(unitInput > 1) ? 'Tickets were' : 'Ticket was'} created successfully for ${nameInput}`
 			});
+			resetInputs(); // reset inputs
 		} catch (error) {
 			setFinalMsg({
 				class: `${commonAlertClass} uk-alert-danger`,
 				msg: `Some problem occured while creating the ticket/s ${error}`
 			});
 		}
-		whatsappButton.current.href = `https://wa.me/91${phoneInput}?text=${encodeURIComponent(getWhatsappMessage(ticketsCount, unitInput))}`;
-		whatsappButton.current.classList.remove('uk-hidden');
-
-		// calculate ticket range text
-		// eliminate lower range if it's only 1 ticket
-		let ticketRangeValue = (unitInput > 1) ? `${sellerInput.seller_id}${addLeadingZeros(startTicketCount, totalDigits)} - ` : '';
-		ticketRangeValue += `${sellerInput.seller_id}${addLeadingZeros(ticketsCount, totalDigits)}`;
-
-		updateCouponImage(ticketRangeValue);
-		resetInputs();
-		setLoading(false);
+		setLoading(false); // hide loader
 	}
 
 	return (
