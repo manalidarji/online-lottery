@@ -157,9 +157,7 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 					</div>
 					<div className="uk-margin">
 						<label>Phone:</label>
-						<input placeholder="9768XXXX83" className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} min="1" max="9999999999" tabIndex="3" required />
-
-						{/* <input placeholder="9768XXXX83" className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} min="1000000000" max="9999999999" tabIndex="3" required /> */}
+						<input placeholder="9768XXXX83" className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} min="1000000000" max="9999999999" tabIndex="3" required />
 					</div>
 					<div className="uk-margin">
 						<label>Unit:</label>
