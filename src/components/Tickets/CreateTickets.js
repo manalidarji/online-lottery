@@ -107,6 +107,9 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 		// get existing number of tickets
 		const allTicketsSnapshot = await getDocs(ticketsCollectionRef);
 		let ticketsCount = allTicketsSnapshot.size;
+		let startTicketCount = ticketsCount;
+		// handle startTicketCount if it's the first ticket in DB
+		startTicketCount = (startTicketCount) ? startTicketCount+1 : 1;
 
 		try {
 			const batch = writeBatch(db);
@@ -133,10 +136,13 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 		}
 		whatsappButton.current.href = `https://wa.me/91${phoneInput}?text=${encodeURIComponent(getWhatsappMessage(ticketsCount, unitInput))}`;
 		whatsappButton.current.classList.remove('uk-hidden');
-		updateCouponImage(
-			`${sellerInput.seller_id}${addLeadingZeros(ticketsCount - unitInput, totalDigits)} - 
-			${sellerInput.seller_id}${addLeadingZeros(ticketsCount, totalDigits)}`
-		);
+
+		// calculate ticket range text
+		// eliminate lower range if it's only 1 ticket
+		let ticketRangeValue = (unitInput > 1) ? `${sellerInput.seller_id}${addLeadingZeros(startTicketCount, totalDigits)} - ` : '';
+		ticketRangeValue += `${sellerInput.seller_id}${addLeadingZeros(ticketsCount, totalDigits)}`;
+
+		updateCouponImage(ticketRangeValue);
 		resetInputs();
 		setLoading(false);
 	}
@@ -152,7 +158,9 @@ ${addLeadingZeros(b, totalDigits)}`, '')}`;
 					</div>
 					<div className="uk-margin">
 						<label>Phone:</label>
-						<input placeholder="9768XXXX83" className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} min="1000000000" max="9999999999" tabIndex="3" required />
+						<input placeholder="9768XXXX83" className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} min="1" max="9999999999" tabIndex="3" required />
+
+						{/* <input placeholder="9768XXXX83" className="uk-input" type='number' value={phoneInput} onChange={e => { setPhoneInput(e.target.value) }} min="1000000000" max="9999999999" tabIndex="3" required /> */}
 					</div>
 					<div className="uk-margin">
 						<label>Unit:</label>
