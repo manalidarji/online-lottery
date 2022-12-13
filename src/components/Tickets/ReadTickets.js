@@ -18,21 +18,67 @@ const ReadTickets = () => {
 		getTickets();
 	}, []);
 
+	const sendWhatsapp = (name, phone, ticketId, units) => {
+		let numbersToPrint = '';
+		for (let i = 0; i < units; i++) {
+			numbersToPrint += `
+${parseInt(ticketId) + i}`
+		}
+		const message = `Greetings of the season ${name},
+		
+Thank you for purchasing Christmas Coupons from Osmosis Youth. Your tickets numbers are as follows:
+${numbersToPrint}`;
+
+		window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(message)}`, '_blank');
+	}
+
+	const sendCouponImage = (name, ticketRange, units) => {
+		const price = parseInt(units) * PER_TICKET_COST;
+		const canvas = document.createElement('canvas');
+		const ctx = canvas.getContext('2d');
+		const img = new Image();
+		canvas.width = 1500;
+		canvas.height = 600;
+		img.src = require("../../assets/img/coupon.png");
+		img.onload = () => {
+			ctx.drawImage(img, 0, 0);
+			ctx.font = '500 28px Open Sans';
+			ctx.textAlign = 'center';
+			ctx.fillStyle = 'black';
+			ctx.fillText(name, 770, 485);
+			ctx.font = '500 26px Open Sans';
+			ctx.fillText(ticketRange, 770, 560);
+			ctx.font = '700 25px Open Sans';
+			ctx.fillStyle = 'white';
+			ctx.fillText(`₹ ${price}`, 768, 427);
+			canvas.toBlob(blob => {
+				const couponImage = new File([blob], 'coupon.png', { type: blob.type });
+				navigator.share({
+					text: '',
+					files: [couponImage]
+				})
+			});
+		}
+	}
+
 	const groupTickets = tickets => {
 		return tickets.filter(ticket => ticket?.ticket_units)
-			.map(ticket => (
-				<tr key={ticket.ticket_id}>
-					<td>
-						<p className="uk-width-max-content uk-margin-remove">{ticket.ticket_id} - {parseInt(ticket.ticket_id) + parseInt(ticket.ticket_units) - 1}</p>
-					</td>
-					<td>{ticket.ticket_owner_name}</td>
-					<td>{ticket.ticket_owner_phone}</td>
-					<td>
-						<button className="uk-button whatsapp-button uk-width-max-content">Send details on WhatsApp</button>
-						<button className="uk-button uk-button-primary uk-width-max-content">Share Coupon Image</button>
-					</td>
-				</tr>
-			))
+			.map(ticket => {
+				const ticketRange = `${ticket.ticket_id} - ${parseInt(ticket.ticket_id) + parseInt(ticket.ticket_units) - 1}`;
+				return (
+					<tr key={ticket.ticket_id}>
+						<td>
+							<p className="uk-width-max-content uk-margin-remove">{ticketRange}</p>
+						</td>
+						<td>{ticket.ticket_owner_name}</td>
+						<td>{ticket.ticket_owner_phone}</td>
+						<td>
+							<button onClick={() => sendWhatsapp(ticket.ticket_owner_name, ticket.ticket_owner_phone, ticket.ticket_id, ticket.ticket_units)} className="uk-button whatsapp-button uk-width-max-content">Send details on WhatsApp</button>
+							<button onClick={() => sendCouponImage(ticket.ticket_owner_name, ticketRange, ticket.ticket_units)} className="uk-button uk-button-primary uk-width-max-content">Share Coupon Image</button>
+						</td>
+					</tr>
+				)
+			})
 	}
 
 	return (
