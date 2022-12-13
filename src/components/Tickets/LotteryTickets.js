@@ -20,13 +20,6 @@ const LotteryTickets = () => {
 
     const checkTicketUniqueness = (indexNumb) => {
         if (finalLotteryTickets.length) {
-            //check for unique ticket owner
-            for (let i = 0; i < finalLotteryTickets.length; i++) {
-                if (finalLotteryTickets[i].ticket_owner_name === tickets[indexNumb].ticket_owner_name) {
-                    return false;
-                }
-            }
-
             // check for unique ticket index numb
             for (let i = 0; i < finalLotteryTickets.length; i++) {
                 if (finalLotteryTickets[i].ticket_index_numb === indexNumb) {
