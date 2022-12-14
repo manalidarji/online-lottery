@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { getDocs } from 'firebase/firestore';
-import { ticketsCollectionRef } from "../../firebase/config";
+import { addDoc, getDocs, serverTimestamp } from 'firebase/firestore';
+import { ticketsCollectionRef, winnerCollectionRef } from "../../firebase/config";
 import UIkit from "uikit";
 
 const LotteryTickets = () => {
@@ -17,15 +17,15 @@ const LotteryTickets = () => {
         setTickets(allTickets);
     }
 
-    const loadCanvas = (text = '01234') => {
+    const loadCanvas = (text = '01234', firstLetter = 30, delay = 30) => {
         new Audio(require('../../assets/audio/drumroll.mp3')).play();
         let flag = true;
         let chars = '0123456789';  // All possible Charactrers
         let scale = 150;  // Font size and overall scale
         let breaks = 0.003;  // Speed loss per frame
         let endSpeed = 0.01;  // Speed at which the letter stops
-        let firstLetter = 240;  // Number of frames untill the first letter stopps (60 frames per second)
-        let delay = 120;  // Number of frames between letters stopping
+        // let firstLetter = 240;  // Number of frames untill the first letter stopps (60 frames per second)
+        // let delay = 120;  // Number of frames between letters stopping
 
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -132,8 +132,9 @@ const LotteryTickets = () => {
             ...tickets[ticketIndexNumb],
             ticket_index_numb: ticketIndexNumb
         }
+        addDoc(winnerCollectionRef, { ...newLotteryTicket, timestamp: serverTimestamp() });
         setFinalLotteryTickets(prevState => [...prevState, newLotteryTicket]);
-        loadCanvas(newLotteryTicket.ticket_id);
+        loadCanvas(newLotteryTicket.ticket_id, 240, 120);
     }
 
     return (

@@ -15,3 +15,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const ticketsCollectionRef = collection(db, 'tickets');
+export const winnerCollectionRef = collection(db, 'winners');
