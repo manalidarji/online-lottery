@@ -1,6 +1,4 @@
-import Header from "../components/Header";
-import LotteryTickets from "../components/Tickets/LotteryTickets";
-import Footer from "../components/Footer";
+import LotteryTickets from "../components/Tickets/
 
 const LotteryPage = () => {
   return (
