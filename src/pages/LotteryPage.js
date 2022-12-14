@@ -4,13 +4,9 @@ import Footer from "../components/Footer";
 
 const LotteryPage = () => {
   return (
-    <>
-    <Header/>
     <div id="main">
         <LotteryTickets />
     </div>
-    <Footer />
-    </>
   )
 }
 
