@@ -1,4 +1,4 @@
-import LotteryTickets from "../components/Tickets/
+import LotteryTickets from "../components/Tickets/LotteryTickets"
 
 const LotteryPage = () => {
   return (
