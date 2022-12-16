@@ -32,7 +32,9 @@ ${numbersToPrint}`;
 		window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(message)}`, '_blank');
 	}
 
-	const sendCouponImage = (name, ticketRange, units) => {
+	const sendCouponImage = async (name, ticketRange, units) => {
+		const sponsorImageBlob = await fetch('../../assets/img/sponsor.jpg').then(res => res.blob());
+		const sponsorImage = new File([sponsorImageBlob], 'sponsor.jpg', { type: 'image/jpeg' });
 		const price = parseInt(units) * PER_TICKET_COST;
 		const canvas = document.createElement('canvas');
 		const ctx = canvas.getContext('2d');
@@ -55,7 +57,7 @@ ${numbersToPrint}`;
 				const couponImage = new File([blob], 'coupon.png', { type: blob.type });
 				navigator.share({
 					text: '',
-					files: [couponImage]
+					files: [couponImage, sponsorImage]
 				})
 			});
 		}

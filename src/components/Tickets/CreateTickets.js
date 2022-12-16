@@ -47,11 +47,13 @@ const CreateTicket = () => {
 		});
 	}
 
-	const canvasClickHandler = () => {
+	const canvasClickHandler = async () => {
 		if (couponImage && whatsappButton.current.classList.contains('uk-hidden')) {
+			const sponsorImageBlob = await fetch('../../assets/img/sponsor.jpg').then(res => res.blob());
+			const sponsorImage = new File([sponsorImageBlob], 'sponsor.jpg', { type: 'image/jpeg' });
 			navigator.share({
 				text: '',
-				files: [couponImage]
+				files: [couponImage, sponsorImage]
 			})
 			setImageToCanvas();
 		} else if (!whatsappButton.current.classList.contains('uk-hidden')) {
