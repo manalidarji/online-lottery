@@ -33,8 +33,8 @@ ${numbersToPrint}`;
 	}
 
 	const sendCouponImage = async (name, ticketRange, units) => {
-		const sponsorImageBlob = await fetch('../../assets/img/sponsor.jpg').then(res => res.blob());
-		const sponsorImage = new File([sponsorImageBlob], 'sponsor.jpg', { type: 'image/jpeg' });
+		const sponsorImageBlob = await fetch(require('../../assets/img/sponsor.jpg')).then(res => res.blob());
+		const sponsorImage = new File([sponsorImageBlob], 'sponsor.jpg', { type: sponsorImageBlob.type });
 		const price = parseInt(units) * PER_TICKET_COST;
 		const canvas = document.createElement('canvas');
 		const ctx = canvas.getContext('2d');

@@ -49,7 +49,7 @@ const CreateTicket = () => {
 
 	const canvasClickHandler = async () => {
 		if (couponImage && whatsappButton.current.classList.contains('uk-hidden')) {
-			const sponsorImageBlob = await fetch('../../assets/img/sponsor.jpg').then(res => res.blob());
+			const sponsorImageBlob = await fetch(require('../../assets/img/sponsor.jpg')).then(res => res.blob());
 			const sponsorImage = new File([sponsorImageBlob], 'sponsor.jpg', { type: 'image/jpeg' });
 			navigator.share({
 				text: '',
