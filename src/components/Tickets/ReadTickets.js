@@ -11,7 +11,7 @@ const ReadTickets = () => {
 	const getTickets = async () => {
 		const data = await getDocs(ticketsCollectionRef);
 		const allTickets = data.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-		setTickets(allTickets.sort((a, b) => b.ticket_id - a.ticket_id));
+		setTickets(allTickets.sort((a, b) => b.timestamp - a.timestamp));
 	}
 
 	useEffect(() => {
@@ -69,6 +69,7 @@ ${numbersToPrint}`;
 				const ticketRange = `${ticket.ticket_id} - ${parseInt(ticket.ticket_id) + parseInt(ticket.ticket_units) - 1}`;
 				return (
 					<tr key={ticket.ticket_id}>
+						<td>₹{parseInt(ticket.ticket_units) * 50}</td>
 						<td>
 							<p className="uk-width-max-content uk-margin-remove">{ticketRange}</p>
 						</td>
@@ -106,6 +107,7 @@ ${numbersToPrint}`;
 						<table className="uk-table uk-table-striped uk-table-small uk-table-middle">
 							<thead>
 								<tr>
+									<th>Transaction Amount</th>
 									<th>Ticket ID Range</th>
 									<th>Ticket Owner Name</th>
 									<th>Ticket Owner Phone</th>
