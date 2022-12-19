@@ -107,11 +107,23 @@ ${sellerInput.seller_id + addLeadingZeros(b, totalDigits)}`, '')}`;
 		setTotalInput(units * perTicketCost);
 	}
 
+	const priceChangeHandler = e => {
+		const price = e.target.value.substring(1);
+		setTotalInput(price);
+		const priceInteger = parseInt(price);
+		if (priceInteger !== NaN) {
+			setUnitInput(price / perTicketCost);
+		}
+	}
+
 	const addLeadingZeros = (num, totalLength) => String(num).padStart(totalLength, '0');
 
 	const createTicketHandler = async (e) => {
 		e.preventDefault();
 		setLoading(true);
+		if(totalInput % 50 !== 0){
+			alert('Price should be in multiples of 50');
+		}
 		const commonAlertClass = 'uk-text-center uk-margin uk-padding-small ';
 
 		await waitForPendingWrites(db);
@@ -180,7 +192,7 @@ ${sellerInput.seller_id + addLeadingZeros(b, totalDigits)}`, '')}`;
 					</div>
 					<div className="uk-margin">
 						<label>Total Amount:</label>
-						<input placeholder="₹" className="uk-input" type='text' value={'₹' + totalInput} readOnly disabled />
+						<input placeholder="₹" className="uk-input" type='text' onChange={priceChangeHandler} value={'₹' + totalInput} />
 					</div>
 					<div className="uk-margin">
 						<label>Sold By Team:</label>
