@@ -111,7 +111,7 @@ ${sellerInput.seller_id + addLeadingZeros(b, totalDigits)}`, '')}`;
 		const price = e.target.value.substring(1);
 		setTotalInput(price);
 		const priceInteger = parseInt(price);
-		if (priceInteger !== NaN) {
+		if (!isNaN(priceInteger)) {
 			setUnitInput(price / perTicketCost);
 		}
 	}
