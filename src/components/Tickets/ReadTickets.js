@@ -69,6 +69,7 @@ ${numbersToPrint}`;
 				const ticketRange = `${ticket.ticket_id} - ${parseInt(ticket.ticket_id) + parseInt(ticket.ticket_units) - 1}`;
 				return (
 					<tr key={ticket.ticket_id}>
+						<td>{ticket.timestamp.toDate().toLocaleString()}</td>
 						<td>₹{parseInt(ticket.ticket_units) * 50}</td>
 						<td>
 							<p className="uk-width-max-content uk-margin-remove">{ticketRange}</p>
@@ -107,6 +108,7 @@ ${numbersToPrint}`;
 						<table className="uk-table uk-table-striped uk-table-small uk-table-middle">
 							<thead>
 								<tr>
+									<th>Date Time</th>
 									<th>Transaction Amount</th>
 									<th>Ticket ID Range</th>
 									<th>Ticket Owner Name</th>
