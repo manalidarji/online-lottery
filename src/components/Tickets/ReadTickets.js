@@ -75,7 +75,7 @@ ${numbersToPrint}`;
 							<p className="uk-width-max-content uk-margin-remove">{ticketRange}</p>
 						</td>
 						<td>{ticket.ticket_owner_name}</td>
-						<td>{ticket.ticket_owner_phone}</td>
+						<td>{ticket.ticket_owner_phone.replace(/(\d{5})$/,'XXXXX')}</td>
 						<td>
 							<button onClick={() => sendWhatsapp(ticket.ticket_owner_name, ticket.ticket_owner_phone, ticket.ticket_id, ticket.ticket_units)} className="uk-button whatsapp-button uk-width-max-content">Send details on WhatsApp</button>
 							<button onClick={() => sendCouponImage(ticket.ticket_owner_name, ticketRange, ticket.ticket_units)} className="uk-button uk-button-primary uk-width-max-content">Share Coupon Image</button>
